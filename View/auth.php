@@ -11,8 +11,6 @@
     <form action="../Controller/loginDB.php" method="POST">
     <input type="text" placeholder="login" name ="login" required>
         <input type="text" placeholder ="password" name="password" required>
-    <!-- <input type="text" placeholder="login" name ="login" >
-        <input type="text" placeholder ="password" name="password" > -->
         <button type="submit">Authorization</button>
         <p>Еще нет аккаунта? <a href="registration.php">Зарегистрируйтесь</a>
     </form>
