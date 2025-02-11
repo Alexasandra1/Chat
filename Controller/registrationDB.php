@@ -31,7 +31,7 @@ class registrationDB {
                     header("Location: ../View/formChat.php"); 
                     exit();
                 } else {
-                    echo "Error: " . $sql . "<br>" . $connect->error;
+                    echo "Error: " . $sql . "<br>" . $this->conn->error;
                 }
         
             }
