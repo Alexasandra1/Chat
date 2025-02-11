@@ -23,10 +23,8 @@ class loginDB
             $stmt->execute();
         
             if ($stmt->rowCount() > 0) {
-                // while($row = $result->fetch_assoc()) {
                     header("Location: ../View/formChat.php"); 
                     exit();
-                // }
             } else {
                 echo "Not found users";
             }
