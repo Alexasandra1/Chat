@@ -10,7 +10,6 @@
 
 <?php 
 require_once __DIR__ . '/../autoload.php';
-use Model\Database;
 use Controller\ChatDB;
 
 ?>
@@ -24,18 +23,7 @@ use Controller\ChatDB;
     </form>
     
 <?php 
-    // function bbcodeToHtml($text) {
-    //     $text = preg_replace('/\*\*(.*?)\*\*/is', '<b>$1</b>', $text);
-    //     $text = preg_replace('/\*(.*?)\*/is', '<i>$1</i>', $text);
-    //     return $text;
-    // }
-
     $chat = new ChatDB();
-
-
-
-    // $db = Database::getInstance();
-    // $connect = $db->getConnection();
     
     $sortField = isset($_GET['sort']) ? $_GET['sort'] : 'created_at';
     $sortOrder = isset($_GET['order']) && strtolower($_GET['order']) === 'asc' ? 'ASC' : 'DESC';
@@ -44,13 +32,6 @@ use Controller\ChatDB;
     $offset = ($page - 1) * $limit;
 
     $result = $chat->getMessages($sortField, $sortOrder, $limit, $offset);
-
-    // $sql = "SELECT * FROM messages ORDER BY $sortField $sortOrder LIMIT :limit OFFSET :offset";
-    // $stmt = $connect->prepare($sql);
-    // $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
-    // $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
-    // $stmt->execute();
-    // $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
     <table>
@@ -81,7 +62,7 @@ use Controller\ChatDB;
     </table>
 
 <?php
-    $totalMessages= $connect->query("SELECT COUNT(*) AS count FROM messages")->fetch(PDO::FETCH_ASSOC)['count'];
+    $totalMessages = $chat->totalMessages();
     $totalPages = ceil($totalMessages / $limit);
 ?>
     <div class='pages'>
