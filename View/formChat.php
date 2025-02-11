@@ -11,6 +11,8 @@
 <?php 
 require_once __DIR__ . '/../autoload.php';
 use Model\Database;
+use Controller\ChatDB;
+
 ?>
     <h1>Welcome to the chat!</h1>
     <form id="messageForm" action="../Controller/messageDB.php" method="post" enctype="multipart/form-data">
@@ -22,14 +24,18 @@ use Model\Database;
     </form>
     
 <?php 
-    function bbcodeToHtml($text) {
-        $text = preg_replace('/\*\*(.*?)\*\*/is', '<b>$1</b>', $text);
-        $text = preg_replace('/\*(.*?)\*/is', '<i>$1</i>', $text);
-        return $text;
-    }
+    // function bbcodeToHtml($text) {
+    //     $text = preg_replace('/\*\*(.*?)\*\*/is', '<b>$1</b>', $text);
+    //     $text = preg_replace('/\*(.*?)\*/is', '<i>$1</i>', $text);
+    //     return $text;
+    // }
 
-    $db = Database::getInstance();
-    $connect = $db->getConnection();
+    $chat = new ChatDB();
+
+
+
+    // $db = Database::getInstance();
+    // $connect = $db->getConnection();
     
     $sortField = isset($_GET['sort']) ? $_GET['sort'] : 'created_at';
     $sortOrder = isset($_GET['order']) && strtolower($_GET['order']) === 'asc' ? 'ASC' : 'DESC';
@@ -37,12 +43,14 @@ use Model\Database;
     $limit = 25;
     $offset = ($page - 1) * $limit;
 
-    $sql = "SELECT * FROM messages ORDER BY $sortField $sortOrder LIMIT :limit OFFSET :offset";
-    $stmt = $connect->prepare($sql);
-    $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
-    $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
-    $stmt->execute();
-    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $result = $chat->getMessages($sortField, $sortOrder, $limit, $offset);
+
+    // $sql = "SELECT * FROM messages ORDER BY $sortField $sortOrder LIMIT :limit OFFSET :offset";
+    // $stmt = $connect->prepare($sql);
+    // $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+    // $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+    // $stmt->execute();
+    // $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
     <table>
@@ -56,7 +64,7 @@ use Model\Database;
       
     <?php 
     foreach ($result as $row) {
-        $messageText = bbcodeToHtml($row['text']);
+        $messageText = $chat->bbcodeToHtml($row['text']);
     ?>
         <tr>
             <td><?="{$row['username']}"?></td>
